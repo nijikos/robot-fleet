@@ -13,6 +13,15 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      rotate: {
+        "60": "60deg",
+        "240": "240deg",
+        "330": "330deg",
+        "7": "7deg",
+        "53": "53deg",
+        "233": "233deg",
+        "323": "323deg",
+      },
     },
   },
   plugins: [],

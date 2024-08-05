@@ -1,40 +1,65 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Introduction
 
-## Getting Started
+This web application provides a map view to display a fleet of robots. Built with the Next.js framework and TypeScript, and uses Tailwind CSS for styling.
 
-First, run the development server:
+## Installation
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+1. To install dependencies
+
+   ```jsx
+   npm install
+   ```
+
+2. Run the app
+
+   ```jsx
+   npm run dev
+   ```
+
+   App by default will run on http://localhost:3000/
+
+## Directory Structure
+
+```jsx
+robot-fleet-map/
+├── public/
+│ ├── icons/
+│ │ └── arrow-up.svg
+│ └── images/
+│ │ └── campus_sim.png
+├── src/
+│ ├── @data/
+│ │ ├── mapData.ts
+│ ├── components/
+│ │ ├── MapChild.tsx
+│ │ ├── MapView.tsx
+│ │ └── MapView2.tsx
+│ ├── helpers/
+│ │ ├── index.ts
+│ ├── pages/
+│ │ ├── _app.tsx
+│ │ ├── _document.tsx
+│ │ └── index.tsx
+│ ├── styles/
+│ │ └── globals.css
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Main Component
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+The main component for displaying the map using Mapbox is located in
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## Implementation Process & Notes
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+To create the display of robot fleets on Mapbox, here are the steps I followed:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+1. I started by mapping the points of each robot on Figma to determine their locations. I then saved this as a PNG file, which can be found at `/public/images/campus_sim_mapped.png`.
+2. Since the robot map's north does not align with the global map view (approximately -7 degrees off), I created separate `MapView.tsx` and `MapChild.tsx` components to accurately trace the correct scale, rotation, and, most importantly, the bounding box coordinates.
+3. Once I received the map bound coordinates, I used them in `MapView2.tsx` to implement the bounds within the `<Map />` component.
+4. To place the markers correctly, I created the `rotatePoint()` function. This function rotates the points of each robot by an angle from the original local coordinates to provide the new rotated coordinates. To display the markers, I use the top-left bound coordinates as anchor points, which I then offset using the new coordinates obtained from `rotatePoint()`.
+5. To display the information of the robot’s local coordinates as well as the headings, I used Mapbox’s `Popup` component. This popup appears when the user hovers over the robot markers, utilizing `useState` to manage the popup state.
 
-## Learn More
+## Current Limitations
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. Setting up map bounds coordinates and zoom levels remains a manual process.
+2. Marker positions are currently set using offset (x and y coordinates) rather than actual longitude and latitude coordinates.
+3. To avoid potential issues with the current setup, zooming and panning functionalities are disabled.
