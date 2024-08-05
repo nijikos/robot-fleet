@@ -39,7 +39,7 @@ export default function MapView2() {
       doubleClickZoom={false}
     >
       {rotatedCoordinates.map((coord, index) => {
-        const hc = coord.headingClass;
+        const hc = coord.heading;
         return (
           <Marker
             className='cursor-pointer'
@@ -53,7 +53,17 @@ export default function MapView2() {
               alt='Marker Arrow'
               width={24}
               height={24}
-              className={`${hc}`}
+              className={
+                hc === -7
+                  ? "-rotate-7"
+                  : hc === 53
+                  ? "rotate-53"
+                  : hc === 233
+                  ? "rotate-233"
+                  : hc === 323
+                  ? "rotate-323"
+                  : ""
+              }
               onMouseEnter={() => {
                 setShowPopup(true);
                 setPopupInfo({ ...coord, label: `Robot 00${index + 1}` });
